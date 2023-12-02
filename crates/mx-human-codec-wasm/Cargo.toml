@@ -1,0 +1,25 @@
+[package]
+name = "mx-human-codec-wasm"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+# [features]
+# default = ["getrandom/js"]
+
+[dependencies]
+getrandom = { version = "0.2.10", features = ["js"] }
+wee_alloc = "0.4.5"
+wasm-bindgen = "0.2.89"
+console_error_panic_hook = "0.1.7"
+
+
+# multiversx-sc-codec-human-readable = { git = "https://github.com/laurci/mx-sdk-rs.git", branch = "human3" }
+# multiversx-sc-meta = { git = "https://github.com/laurci/mx-sdk-rs.git", branch = "human3" }
+# multiversx-sc = { git = "https://github.com/laurci/mx-sdk-rs.git", branch = "human3" }
+
+multiversx-sc-codec-human-readable = { path = "../../../mx-sdk-rs/data/human-readable" }
+multiversx-sc-meta = { path = "../../../mx-sdk-rs/framework/meta" }
+multiversx-sc = { path = "../../../mx-sdk-rs/framework/base" }

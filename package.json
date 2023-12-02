@@ -11,7 +11,8 @@
         "lib-human": "yarn workspace mx-human-codec"
     },
     "workspaces": [
-        "packages/*"
+        "packages/*",
+        "crates/mx-human-codec-wasm/pkg"
     ],
     "devDependencies": {
         "husky": "^8.0.3",

@@ -4,4 +4,6 @@ yarn.lock
 
 dist
 __generated__
+
 target
+pkg

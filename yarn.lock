@@ -1277,10 +1277,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"mx-human-codec-wasm@workspace:^, mx-human-codec-wasm@workspace:crates/mx-human-codec-wasm/pkg":
+  version: 0.0.0-use.local
+  resolution: "mx-human-codec-wasm@workspace:crates/mx-human-codec-wasm/pkg"
+  languageName: unknown
+  linkType: soft
+
 "mx-human-codec@workspace:^, mx-human-codec@workspace:packages/lib-mx-human-codec":
   version: 0.0.0-use.local
   resolution: "mx-human-codec@workspace:packages/lib-mx-human-codec"
   dependencies:
+    mx-human-codec-wasm: "workspace:^"
     typescript: "npm:^5.3.2"
   languageName: unknown
   linkType: soft

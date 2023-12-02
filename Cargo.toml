@@ -1,10 +1,10 @@
 [workspace]
 resolver = "2"
 members = [
-    "crates/mx-human-codec",
+    "crates/mx-human-codec-wasm",
 ]
 
 # not needed for now, but will be useful when we have more crates
 # default_members = [
-#     "crates/mx-human-codec",
+#     "crates/mx-human-codec-wasm",
 # ]

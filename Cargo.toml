@@ -3,6 +3,8 @@ resolver = "2"
 members = [
     "crates/mx-human-codec",
 ]
-default_members = [
-    "crates/mx-human-codec",
-]
+
+# not needed for now, but will be useful when we have more crates
+# default_members = [
+#     "crates/mx-human-codec",
+# ]

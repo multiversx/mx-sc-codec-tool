@@ -1,0 +1,8 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/mx-human-codec",
+]
+default_members = [
+    "crates/mx-human-codec",
+]

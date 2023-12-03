@@ -24,6 +24,6 @@ You can then preview the web app by running `just preview`. This will start a we
 
 For development you can run `just dev-web` to start a web server on port `5173` and watch for changes in the web app source. You need to manually run `just build-wasm` when you change the Rust library, but the web app should reload automatically.
 
-## How it works
+## The state of the project
 
-TODO
+It's not pretty and the UI code is a bit messy, but it works. I focused on speed rather than looks.

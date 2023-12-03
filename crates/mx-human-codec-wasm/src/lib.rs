@@ -7,6 +7,7 @@ use wasm_bindgen::prelude::*;
 extern crate console_error_panic_hook;
 
 mod abi;
+mod decode;
 mod defaults;
 
 #[wasm_bindgen(start)]

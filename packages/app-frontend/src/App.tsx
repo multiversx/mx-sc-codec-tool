@@ -1,6 +1,7 @@
 import { HumanCodec } from "mx-human-codec";
 
 import { useState } from "react";
+import Editor from "./components/Editor";
 import TypeSelector from "./components/TypeSelector";
 import Upload from "./components/Upload";
 
@@ -9,7 +10,59 @@ const codec = await HumanCodec.init();
 function App() {
 	const [types, setTypes] = useState<string[]>([]);
 	const [selectedType, setSelectedType] = useState<string | null>(null);
-	const [value, setValue] = useState<string>("");
+	const [defaultValue, setDefaultValue] = useState<string>("");
+
+	const [loading, setLoading] = useState<boolean>(false);
+	const [output, setOutput] = useState<string>("");
+
+	function setError(e: unknown) {
+		console.error(e);
+		setLoading(false);
+		if (typeof e === "string") {
+			setOutput(e);
+		} else if (e instanceof Error) {
+			setOutput(e.message);
+		} else {
+			setOutput("unknown error");
+		}
+	}
+
+	function initAbi(json: string) {
+		try {
+			codec.loadAbi(json);
+
+			setTypes(codec.types);
+
+			if (codec.types.length > 0) {
+				setType(codec.types[0]!);
+			} else {
+				throw new Error("no types found");
+			}
+		} catch (e) {
+			setError(e);
+		}
+	}
+
+	function computeOutput(type: string, input: string) {
+		try {
+			const output = codec.decodeValueOfType(type, input);
+			setLoading(false);
+			setOutput(output);
+		} catch (e) {
+			setError(e);
+		}
+	}
+
+	function setType(type: string) {
+		try {
+			const value = codec.getDefaultForType(type);
+			setSelectedType(type);
+			setDefaultValue(value);
+			computeOutput(type, value);
+		} catch (e) {
+			setError(e);
+		}
+	}
 
 	return (
 		<div style={{ padding: "1rem" }}>
@@ -17,17 +70,7 @@ function App() {
 			<Upload
 				onUpload={(json) => {
 					console.log("abi json", json);
-
-					codec.loadAbi(json);
-
-					setTypes(codec.types);
-					setSelectedType(codec.types[0] ?? null);
-
-					if (codec.types.length > 0) {
-						setValue(codec.getDefaultForType(codec.types[0]));
-					} else {
-						setValue("");
-					}
+					initAbi(json);
 				}}
 			/>
 			{types.length > 0 && (
@@ -36,16 +79,25 @@ function App() {
 					<TypeSelector
 						types={types}
 						onSelect={(t) => {
-							setSelectedType(t);
-							setValue(codec.getDefaultForType(t));
+							setType(t);
 						}}
 					/>
 				</div>
 			)}
+			{!loading && output !== "" && <p style={{ marginTop: "20px" }}>Result: {output}</p>}
+			{loading && <p style={{ marginTop: "20px" }}>loading...</p>}
 			{selectedType && (
 				<div style={{ marginTop: "20px" }}>
 					<p>value for type {selectedType}: </p>
-					<pre>{value}</pre>
+					<Editor
+						defaultValue={defaultValue}
+						onChange={(v) => {
+							computeOutput(selectedType, v ?? defaultValue);
+						}}
+						onStartedChange={() => {
+							setLoading(true);
+						}}
+					/>
 				</div>
 			)}
 		</div>

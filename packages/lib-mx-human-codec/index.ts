@@ -1,4 +1,5 @@
 import init, {
+	decode_value,
 	get_default_json_for_type,
 	list_contract_abi_types,
 	load_abi,
@@ -63,6 +64,17 @@ export class HumanCodec {
 			return this.cachedDefaults.get(typeName)!;
 		} finally {
 			console.timeEnd("getDefaultForType " + typeName);
+		}
+	}
+
+	public decodeValueOfType(typeName: string, value: string): string {
+		try {
+			console.time("decodeValueOfType " + typeName);
+			if (!this.abiJson) throw new Error("no abi provided");
+
+			return decode_value(this.abiJson, value, typeName);
+		} finally {
+			console.timeEnd("decodeValueOfType " + typeName);
 		}
 	}
 }

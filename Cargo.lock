@@ -1035,6 +1035,7 @@ dependencies = [
  "multiversx-sc",
  "multiversx-sc-codec-human-readable",
  "multiversx-sc-meta",
+ "serde_json",
  "wasm-bindgen",
  "wee_alloc",
 ]

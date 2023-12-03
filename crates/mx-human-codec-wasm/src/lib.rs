@@ -9,6 +9,7 @@ extern crate console_error_panic_hook;
 mod abi;
 mod decode;
 mod defaults;
+mod schema;
 
 #[wasm_bindgen(start)]
 pub fn start() {

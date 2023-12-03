@@ -11,6 +11,7 @@ function App() {
 	const [types, setTypes] = useState<string[]>([]);
 	const [selectedType, setSelectedType] = useState<string | null>(null);
 	const [defaultValue, setDefaultValue] = useState<string>("");
+	const [schema, setSchema] = useState<object | undefined>();
 
 	const [loading, setLoading] = useState<boolean>(false);
 	const [output, setOutput] = useState<string>("");
@@ -59,6 +60,15 @@ function App() {
 			setSelectedType(type);
 			setDefaultValue(value);
 			computeOutput(type, value);
+
+			try {
+				const schema = codec.getSchemaForType(type);
+				console.log("schema", schema);
+				setSchema(JSON.parse(schema));
+			} catch (e) {
+				console.error(e);
+				setSchema(undefined);
+			}
 		} catch (e) {
 			setError(e);
 		}
@@ -91,6 +101,7 @@ function App() {
 					<p>value for type {selectedType}: </p>
 					<Editor
 						defaultValue={defaultValue}
+						schema={schema}
 						onChange={(v) => {
 							computeOutput(selectedType, v ?? defaultValue);
 						}}

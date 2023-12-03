@@ -1,4 +1,5 @@
 import init, {
+	build_schema,
 	decode_value,
 	get_default_json_for_type,
 	list_contract_abi_types,
@@ -11,6 +12,7 @@ export class HumanCodec {
 	private abiJson: string | undefined;
 	private cachedTypes: string[] | undefined;
 	private cachedDefaults: Map<string, string> = new Map();
+	private cachedSchemas: Map<string, string> = new Map();
 
 	private constructor(private options: HumanCodecOptions) {}
 
@@ -22,6 +24,7 @@ export class HumanCodec {
 	private reset() {
 		this.cachedTypes = undefined;
 		this.cachedDefaults = new Map();
+		this.cachedSchemas = new Map();
 	}
 
 	public loadAbi(json: string) {
@@ -64,6 +67,23 @@ export class HumanCodec {
 			return this.cachedDefaults.get(typeName)!;
 		} finally {
 			console.timeEnd("getDefaultForType " + typeName);
+		}
+	}
+
+	public getSchemaForType(typeName: string): string {
+		try {
+			console.time("getSchemaForType " + typeName);
+			if (!this.cachedSchemas.get(typeName)) {
+				if (!this.abiJson) throw new Error("no abi provided");
+
+				const rawSchema = build_schema(this.abiJson, typeName);
+				const schemaJson = JSON.stringify(JSON.parse(rawSchema), null, 4);
+
+				this.cachedSchemas.set(typeName, schemaJson);
+			}
+			return this.cachedSchemas.get(typeName)!;
+		} finally {
+			console.timeEnd("getSchemaForType " + typeName);
 		}
 	}
 

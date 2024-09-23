@@ -21,17 +21,7 @@ pub fn build_schema_for_type(
     type_name: &str,
     contract_abi: &ContractAbi,
 ) -> Result<JsonValue, SchemaError> {
-    let type_description =
-        if let Some(type_description) = contract_abi.type_descriptions.0.get(type_name) {
-            type_description.to_owned()
-        } else {
-            TypeDescription {
-                docs: Vec::new(),
-                name: type_name.to_string(),
-                contents: TypeContents::NotSpecified,
-            }
-        };
-
+    let type_description = contract_abi.type_descriptions.find_or_default(type_name);
     build_schema_for_type_description(&type_description, contract_abi)
 }
 
@@ -40,7 +30,7 @@ pub fn build_schema_for_type_description(
     contract_abi: &ContractAbi,
 ) -> Result<JsonValue, SchemaError> {
     match &type_description.contents {
-        TypeContents::NotSpecified => build_schema_for_single_value(type_description.name.as_str()),
+        TypeContents::NotSpecified => build_schema_for_single_value(&type_description.names.abi),
         TypeContents::Enum(variants) => build_schema_for_enum(&variants, contract_abi),
         TypeContents::Struct(fields) => build_schema_for_struct(fields, contract_abi),
         TypeContents::ExplicitEnum(_) => panic!("not supported"),
@@ -88,7 +78,7 @@ fn build_schema_for_struct(
     let mut properties = Vec::new();
 
     for field in fields {
-        let field_type = build_schema_for_type(&field.field_type, abi)?;
+        let field_type = build_schema_for_type(&field.field_type.abi, abi)?;
         properties.push((field.name.clone(), field_type));
     }
 
@@ -159,7 +149,7 @@ fn build_schema_for_enum(
 
     for variant in variants_complex.iter() {
         if variant.is_tuple_variant() && variant.fields.len() == 1 {
-            let type_name = variant.fields[0].field_type.as_str();
+            let type_name = variant.fields[0].field_type.abi.as_str();
 
             variant_complex_values.push(wrap_in_single_key_object(
                 &variant.name,
@@ -175,7 +165,7 @@ fn build_schema_for_enum(
 
             let mut values = Vec::new();
             for field in ordered_fields {
-                values.push(build_schema_for_type(&field.field_type, &abi)?);
+                values.push(build_schema_for_type(&field.field_type.abi, &abi)?);
             }
 
             variant_complex_values.push(wrap_in_single_key_object(
@@ -197,7 +187,7 @@ fn build_schema_for_enum(
         let mut properties = Vec::new();
 
         for field in variant.fields.iter() {
-            let field_type = build_schema_for_type(&field.field_type, &abi)?;
+            let field_type = build_schema_for_type(&field.field_type.abi, &abi)?;
             properties.push((field.name.clone(), field_type));
         }
 

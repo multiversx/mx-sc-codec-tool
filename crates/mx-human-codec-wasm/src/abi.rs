@@ -3,7 +3,7 @@ use std::{collections::HashMap, sync::Mutex};
 use wasm_bindgen::prelude::*;
 
 use multiversx_sc::abi::ContractAbi;
-use multiversx_sc_meta::abi_json::deserialize_abi_from_json;
+use multiversx_sc_meta_lib::abi_json::deserialize_abi_from_json;
 
 fn abi_cache() -> &'static Mutex<HashMap<String, ContractAbi>> {
     static mut SINGLETON: std::mem::MaybeUninit<Mutex<HashMap<String, ContractAbi>>> =
@@ -46,7 +46,7 @@ pub fn list_contract_abi_types(abi_json: String) -> Result<Vec<String>, String> 
     let mut types = Vec::new();
 
     for (name, _) in abi.type_descriptions.0.iter() {
-        types.push(String::from_utf8_lossy(name.as_bytes()).into());
+        types.push(String::from_utf8_lossy(name.abi.as_bytes()).into());
     }
 
     Ok(types)

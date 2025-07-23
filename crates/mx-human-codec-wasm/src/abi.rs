@@ -5,6 +5,7 @@ use wasm_bindgen::prelude::*;
 use multiversx_sc::abi::ContractAbi;
 use multiversx_sc_meta_lib::abi_json::deserialize_abi_from_json;
 
+#[allow(static_mut_refs)]
 fn abi_cache() -> &'static Mutex<HashMap<String, ContractAbi>> {
     static mut SINGLETON: std::mem::MaybeUninit<Mutex<HashMap<String, ContractAbi>>> =
         std::mem::MaybeUninit::uninit();

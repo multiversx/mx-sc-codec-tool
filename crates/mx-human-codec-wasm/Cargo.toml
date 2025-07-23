@@ -1,7 +1,7 @@
 [package]
 name = "mx-human-codec-wasm"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [lib]
 crate-type = ["cdylib"]
@@ -13,10 +13,6 @@ wasm-bindgen = "0.2.89"
 serde_json = "1.0.108"
 console_error_panic_hook = "0.1.7"
 
-multiversx-sc-codec-human-readable = { git = "https://github.com/laurci/mx-sdk-rs.git", rev = "5ee275ee62940ef16d9a8ca22ded585f7dff914f" }
-multiversx-sc-meta-lib = { git = "https://github.com/laurci/mx-sdk-rs.git", rev = "5ee275ee62940ef16d9a8ca22ded585f7dff914f" }
-multiversx-sc = { git = "https://github.com/laurci/mx-sdk-rs.git", rev = "5ee275ee62940ef16d9a8ca22ded585f7dff914f" }
-
-# multiversx-sc-codec-human-readable = { path = "../../../mx-sdk-rs/data/human-readable" }
-# multiversx-sc-meta = { path = "../../../mx-sdk-rs/framework/meta" }
-# multiversx-sc = { path = "../../../mx-sdk-rs/framework/base" }
+multiversx-sc-codec-human-readable = { git = "https://github.com/multiversx/mx-sdk-rs.git", rev = "db17a176fc5d43388ba8099ca38282fb00bb856f" }
+multiversx-sc-meta-lib = { git = "https://github.com/multiversx/mx-sdk-rs.git", rev = "db17a176fc5d43388ba8099ca38282fb00bb856f" }
+multiversx-sc = { git = "https://github.com/multiversx/mx-sdk-rs.git", rev = "db17a176fc5d43388ba8099ca38282fb00bb856f" }
